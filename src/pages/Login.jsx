@@ -1,24 +1,34 @@
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import LockIcon from "@mui/icons-material/Lock";
-import image from "../assets/result.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import {Formik, Form} from 'formik'
+import Avatar from "@mui/material/Avatar"
+import Box from "@mui/material/Box"
+import Container from "@mui/material/Container"
+import Grid from "@mui/material/Grid"
+import Typography from "@mui/material/Typography"
+import LockIcon from "@mui/icons-material/Lock"
+import image from "../assets/result.svg"
+import { Link, useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { Formik, Form } from "formik"
 import TextField from "@mui/material/TextField"
-import { object, string, number, date, InferType } from 'yup';
+import { object, string, number, date, InferType } from "yup"
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { currentUser, error } = useSelector((state) => state?.auth);
- const loginScheme= object({
-  
-  email: string().email().required("Bu alan zorunludur")
- 
-});
+  const navigate = useNavigate()
+  const { currentUser, error } = useSelector((state) => state?.auth)
+
+  const loginScheme = object({
+    email: string()
+      .email("Lutfen valid bir email giriniz")
+      .required("Email zorunludur"),
+    password: string()
+      .required("password zorunludur")
+      .min(8, "password en az 8 karakter olmalıdır")
+      .max(20, "password en fazla 20 karakter olmalıdır")
+      .matches(/\d+/, "Password bir sayı içermelidir")
+      .matches(/[a-z]/, "Password bir küçük harf içermelidir")
+      .matches(/[A-Z]/, "Password bir büyük harf içermelidir")
+      .matches(/[!,?{}><%&$#£+-.]+/, "Password bir özel karakter içermelidir"),
+  })
+
   return (
     <Container maxWidth="lg">
       <Grid
@@ -57,14 +67,14 @@ const Login = () => {
           </Typography>
 
           <Formik
-          initiaiValues={{email: "", password:""}}
-          validationSchema={loginScheme}
-          onSubmit={(values,action)=>{
-            // actions.resetForm()
-            // actions.setSubmitting(false)
-          }}
+            initialValues={{ email: "", password: "" }}
+            validationSchema={loginScheme}
+            onSubmit={(values, actions) => {
+              actions.resetForm()
+              actions.setSubmitting(false)
+            }}
           >
-              {({ values, handleChange, handleBlur, errors, touched }) => (
+            {({ values, handleChange, handleBlur, errors, touched }) => (
               <Form>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <TextField
@@ -85,7 +95,7 @@ const Login = () => {
                     id="password"
                     type="password"
                     variant="outlined"
-                    value={values.password}
+                    value={values?.password || ""}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={touched.password && Boolean(errors.password)}
@@ -108,7 +118,7 @@ const Login = () => {
         </Grid>
       </Grid>
     </Container>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
