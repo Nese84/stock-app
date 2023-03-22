@@ -55,11 +55,11 @@ const Login = () => {
           initiaiValues={{email: "", password:""}}
           validationSchema={loginScheme}
           onSubmit={(values,action)=>{
-            actions.resetForm()
-            actions.setSubmitting()
+            // actions.resetForm()
+            // actions.setSubmitting(false)
           }}
           >
-             {({ values, handleChange, handleBlur, errors }) => (
+             {({ values, handleChange, handleBlur, errors, touched }) => (
               <Form>
                 <Box>
                   <TextField
@@ -68,6 +68,12 @@ const Login = () => {
                     id="email"
                     type="email"
                     variant="outlined"
+                    value={values?.email || ""}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.email && Boolean(errors.email)}
+                    helperText={touched.email && errors.email}
+                    required
                   />
                 </Box>
               </Form>
