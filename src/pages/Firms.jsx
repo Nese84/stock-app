@@ -7,15 +7,15 @@ import useStockCall from "../hooks/useStockCall"
 import { flex } from "../styles/globalStyle"
 
 
-
 const Firms = () => {
- 
+  
+  
 
   const { getStockData } = useStockCall()
   const { firms } = useSelector((state) => state.stock)
 
   useEffect(() => {
-    
+   
     getStockData("firms")
   }, [])
 
